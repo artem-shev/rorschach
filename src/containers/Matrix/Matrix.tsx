@@ -10,7 +10,7 @@ const initialUpdateDelay = 500;
 
 const useApp = () => {
   const cells = useSelector(cellsSelectors.getState);
-  const { initialize, tick } = useActions<typeof mapDispatchToProps>(mapDispatchToProps, []);
+  const { initialize, tick } = useActions<typeof mapDispatchToProps>(mapDispatchToProps);
 
   const [size, setSize] = useState(initialSize);
   const [updateDelay, setUpdateDelay] = useState(initialUpdateDelay);
@@ -19,7 +19,7 @@ const useApp = () => {
   const handleSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newSize = Number(e.target.value);
 
-    if (newSize < initialSize) setSize(newSize);
+    if (newSize <= 100) setSize(newSize);
   };
   const handleUpdateDelayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newDelay = Number(e.target.value);
