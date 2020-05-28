@@ -21,15 +21,20 @@ The Problem:
 2. This grid is subject to changes on what is called a tick. When a grid “ticks”, these are the rules to determine the next state of the grid:
  
 Any live cell with fewer than two live neighbours dies (underpopulation).
-// if (liveNeighbours < 2) die()
  
 Any live cell with two or three live neighbours lives on to the next generation.
-// if (liveNeighbours === 2 || 3) persist()
  
 Any live cell with more than three live neighbours dies (overcrowding).
-// if (liveNeighbours > 3) die()
  
 Any dead cell with exactly three live neighbours becomes a live cell (reproduction).
+ 
+ 
+// isAlive &&
+// if (liveNeighbours < 2) die
+// if (liveNeighbours === 2 || 3) persist
+// if (liveNeighbours > 3) die
+
+// !isAlive &&
 // if (liveNeighbours === 3) live
  
 Try to look at the first state of this grid and apply the rules above. The result will be the second grid, as shown below:

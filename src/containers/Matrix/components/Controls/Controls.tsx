@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
-interface Props {}
+import styles from './Controls.module.scss';
 
-const Controls = (props: Props) => {
-  return <div>Controls</div>;
-};
+interface InputProps {
+  label: string;
+  defaultValue: number;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => any;
+}
+
+const Input = ({ label, defaultValue, onChange }: InputProps) => (
+  <div className={styles.inputWrapper}>
+    <label className={styles.label}>{label}</label>
+    <input type="number" defaultValue={defaultValue} onChange={onChange} className={styles.input} />
+  </div>
+);
+
+interface Props {
+  size: number;
+  updateDelay: number;
+  onSizeChange: (event: ChangeEvent<HTMLInputElement>) => any;
+  onDelayChange: (event: ChangeEvent<HTMLInputElement>) => any;
+}
+
+const Controls = ({ size, onDelayChange, onSizeChange, updateDelay }: Props) => (
+  <div className={styles.controlsWrapper}>
+    <Input label="size" defaultValue={size} onChange={onSizeChange} />
+    <Input label="delay" defaultValue={updateDelay} onChange={onDelayChange} />
+  </div>
+);
 
 Controls.defaultProps = {};
 
