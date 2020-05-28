@@ -20,12 +20,16 @@ interface Props {
   updateDelay: number;
   onSizeChange: (event: ChangeEvent<HTMLInputElement>) => any;
   onDelayChange: (event: ChangeEvent<HTMLInputElement>) => any;
+  onReset: () => void;
 }
 
-const Controls = ({ size, onDelayChange, onSizeChange, updateDelay }: Props) => (
+const Controls = ({ size, onDelayChange, onSizeChange, updateDelay, onReset }: Props) => (
   <div className={styles.controlsWrapper}>
     <Input label="size" defaultValue={size} onChange={onSizeChange} />
     <Input label="delay" defaultValue={updateDelay} onChange={onDelayChange} />
+    <div>
+      <button onClick={onReset}>reset</button>
+    </div>
   </div>
 );
 

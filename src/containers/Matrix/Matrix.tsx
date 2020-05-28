@@ -1,18 +1,20 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Controls from 'containers/Matrix/components/Controls';
 import Table from 'containers/Matrix/components/Table';
 import { cellsActions, cellsSelectors } from 'store/cells';
-import { AppState } from 'store';
-
-type Props = ConnectedProps<typeof connector>;
+import { useActions } from 'utils/storeUtils';
 
 const initialSize = 50;
 const initialUpdateDelay = 500;
 
-const Matrix = ({ initialize, cells, tick }: Props) => {
+const useApp = () => {
+  const cells = useSelector(cellsSelectors.getState);
+  const { initialize, tick } = useActions<typeof mapDispatchToProps>(mapDispatchToProps, []);
+
   const [size, setSize] = useState(initialSize);
   const [updateDelay, setUpdateDelay] = useState(initialUpdateDelay);
+  const [resetTriger, setResetTriger] = useState(true);
 
   const handleSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newSize = Number(e.target.value);
@@ -22,7 +24,10 @@ const Matrix = ({ initialize, cells, tick }: Props) => {
   const handleUpdateDelayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newDelay = Number(e.target.value);
 
-    if (newDelay > initialUpdateDelay) setUpdateDelay(newDelay);
+    if (newDelay >= 100) setUpdateDelay(newDelay);
+  };
+  const handleReset = () => {
+    setResetTriger(!resetTriger);
   };
 
   useEffect(() => {
@@ -35,7 +40,20 @@ const Matrix = ({ initialize, cells, tick }: Props) => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [initialize, tick, updateDelay, size]);
+  }, [initialize, tick, updateDelay, size, resetTriger]);
+
+  return { size, updateDelay, handleSizeChange, handleUpdateDelayChange, cells, handleReset };
+};
+
+const Matrix = () => {
+  const {
+    cells,
+    handleUpdateDelayChange,
+    handleSizeChange,
+    updateDelay,
+    size,
+    handleReset,
+  } = useApp();
 
   return (
     <div>
@@ -44,6 +62,7 @@ const Matrix = ({ initialize, cells, tick }: Props) => {
         updateDelay={updateDelay}
         onSizeChange={handleSizeChange}
         onDelayChange={handleUpdateDelayChange}
+        onReset={handleReset}
       />
       <Table size={size} cells={cells} />
     </div>
@@ -52,11 +71,6 @@ const Matrix = ({ initialize, cells, tick }: Props) => {
 
 Matrix.defaultProps = {};
 
-const mapStateToProps = (state: AppState) => ({
-  cells: cellsSelectors.getState(state),
-});
 const mapDispatchToProps = { initialize: cellsActions.initialize, tick: cellsActions.tick };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(Matrix);
+export default Matrix;
