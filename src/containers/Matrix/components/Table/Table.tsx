@@ -1,14 +1,22 @@
 import React, { useMemo } from 'react';
+import classNames from 'classnames';
 
 import styles from './Table.module.scss';
+import { CellsState, getCellId } from 'store/cells';
 
 const createEmptyArray = (size: number) => [...Array(size)];
 
 interface Props {
   size: number;
+  cells: CellsState;
 }
 
-const Table = ({ size }: Props) => {
+const isAlive = (rowIndex: number, colIndex: number, cells: CellsState) => {
+  const id = getCellId(rowIndex, colIndex);
+  return cells[id]?.isAlive;
+};
+
+const Table = ({ size, cells }: Props) => {
   const rows = useMemo(() => createEmptyArray(size), [size]);
   const cols = useMemo(() => createEmptyArray(size), [size]);
 
@@ -17,7 +25,13 @@ const Table = ({ size }: Props) => {
       {rows.map((_, rowIndex) => (
         <div key={rowIndex} className={styles.row}>
           {cols.map((_, colIndex) => (
-            <div className={styles.cell} key={colIndex} />
+            <div
+              className={classNames(
+                styles.cell,
+                isAlive(rowIndex, colIndex, cells) && styles.aliveCell,
+              )}
+              key={colIndex}
+            />
           ))}
         </div>
       ))}
