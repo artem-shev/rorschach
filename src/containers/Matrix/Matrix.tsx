@@ -9,9 +9,17 @@ type Props = ConnectedProps<typeof connector>;
 
 const size = 50;
 
-const Matrix = ({ initialize, cells }: Props) => {
+const Matrix = ({ initialize, cells, tick }: Props) => {
   useEffect(() => {
     initialize(size);
+
+    const intervalId = setInterval(() => {
+      tick();
+    }, 500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [initialize]);
 
   return (
@@ -27,7 +35,7 @@ Matrix.defaultProps = {};
 const mapStateToProps = (state: AppState) => ({
   cells: cellsSelectors.getState(state),
 });
-const mapDispatchToProps = { initialize: cellsActions.initialize };
+const mapDispatchToProps = { initialize: cellsActions.initialize, tick: cellsActions.tick };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

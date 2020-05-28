@@ -30,6 +30,7 @@ Any live cell with more than three live neighbours dies (overcrowding).
 // if (liveNeighbours > 3) die()
  
 Any dead cell with exactly three live neighbours becomes a live cell (reproduction).
+// if (liveNeighbours === 3) live
  
 Try to look at the first state of this grid and apply the rules above. The result will be the second grid, as shown below:
  
