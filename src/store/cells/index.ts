@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import { AppState } from 'store/rootReducer';
 import { mapValues } from 'lodash';
 
-import { CellsState, makeCells, getIsAlive, Cell } from './helpers';
+import { CellsState, makeCells, getIsAlive } from './helpers';
 
 export const cellsModuleName = 'cells';
 
