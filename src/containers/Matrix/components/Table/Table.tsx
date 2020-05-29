@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import { CellsState, getCellId } from 'store/cells';
 import styles from './Table.module.scss';
+import testIds from 'utils/constants/testIds';
 
 const createEmptyArray = (size: number) => [...Array(size)];
 
@@ -16,13 +17,13 @@ interface Props {
   cells: CellsState;
 }
 
-const Table = ({ size, cells }: Props) => {
+const Table: React.FC<Props> = ({ size, cells }: Props) => {
   const iterator = useMemo(() => createEmptyArray(size), [size]);
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-testid={testIds.table}>
       {iterator.map((_, rowIndex) => (
-        <div key={rowIndex} className={styles.row}>
+        <div key={rowIndex} className={styles.row} data-testid={testIds.tableRow}>
           {iterator.map((_, colIndex) => (
             <div
               className={classNames(
@@ -30,6 +31,7 @@ const Table = ({ size, cells }: Props) => {
                 isAlive(rowIndex, colIndex, cells) && styles.aliveCell,
               )}
               key={colIndex}
+              data-testid={testIds.getTableCellId(rowIndex, colIndex)}
             />
           ))}
         </div>
