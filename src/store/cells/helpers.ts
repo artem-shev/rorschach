@@ -1,4 +1,5 @@
-export interface Cell {
+export interface ICell {
+  id: string;
   isAlive: boolean;
   neighbourIds: string[];
 }
@@ -48,6 +49,21 @@ export const getIsAlive = (cells: CellsState, { neighbourIds, isAlive }: Cell) =
   // if (liveNeighbours === 3) live
 };
 
+export class Cell implements ICell {
+  id: string;
+  neighbourIds: string[];
+
+  constructor(
+    rowIndex: number,
+    colIndex: number,
+    matrixSize: number,
+    public isAlive = Math.random() - 0.5 > 0,
+  ) {
+    this.id = getCellId(rowIndex, colIndex);
+    this.neighbourIds = getNeighbourIds(rowIndex, colIndex, matrixSize);
+  }
+}
+
 export const makeCells = (size: number) => {
   const iterator = [...Array(size)].map((_, i) => i);
 
@@ -55,10 +71,7 @@ export const makeCells = (size: number) => {
     const rowCells = iterator.reduce(
       (acc, colIndex) => ({
         ...acc,
-        [getCellId(rowIndex, colIndex)]: {
-          isAlive: Math.random() - 0.5 > 0,
-          neighbourIds: getNeighbourIds(rowIndex, colIndex, size),
-        },
+        [getCellId(rowIndex, colIndex)]: new Cell(rowIndex, colIndex, size),
       }),
       {} as CellsState,
     );
